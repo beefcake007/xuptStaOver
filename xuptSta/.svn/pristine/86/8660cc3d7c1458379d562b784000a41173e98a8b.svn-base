@@ -1,0 +1,77 @@
+﻿<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	function checkLogin(){
+		if(${currentBlogger ==null}){
+			alert("请先登录！");
+		}else{
+			window.location.href="blog_write.action";
+		}
+	}
+	
+	function searchBlog(){
+		var title=$("#title").val();
+		$.post("blog_head.action",{"s_blog.title":title},function(result){
+			
+		},"json");
+	}
+</script>
+</head>
+<body>
+<div id="wrapper" class="home-page">
+    <header>
+        <div class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.jsp"><i class="icon-info-blocks fa fa-star"></i>XUPTSTA</a>
+                </div>
+                <div class="navbar-collapse collapse ">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a class="waves-effect waves-dark" href="blog_head.action">主页</a></li>
+                        <li><a class="waves-effect waves-dark" href="blog_head.action">发现</a></li>
+                        <li><a class="waves-effect waves-dark" href="#">消息</a></li>
+                        <li>
+                            <form class="navbar-form navbar-left">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="搜索" name="s_blog.title" id="s_title" onKeydown="if(event.keyCode==13) searchBlog()">
+                                </div>
+                                <!--<button type="submit" class="btn btn-default">点我</button>-->
+                            </form>
+                        </li>
+                        <c:choose>
+                        	<c:when test="${currentBlogger ==null}">
+                        		<li><a class="waves-effect waves-dark" href="blog_reLogin.action">登录</a></li>
+                        	</c:when>
+                        	<c:otherwise>
+                        		<li class="dropdown">
+		                            <a href="#" data-toggle="dropdown" class="dropdown-toggle waves-effect waves-dark"><img style=" border-radius:50%; height:40px; width:40px;" src="${pageContext.request.contextPath }${currentBlogger.imageName}"><b class="caret"></b></a>
+		                            <ul class="dropdown-menu">
+		                                <li><a class="waves-effect waves-dark" href="blogger_myself.action?bloggerId=${currentBlogger.id }&s_blog.blogger.id=${currentBlogger.id }">我的主页</a></li>
+		                                <li><a class="waves-effect waves-dark" href="#">喜欢的文章</a></li>
+		                                <li><a class="waves-effect waves-dark" href="blogger_setting.action">设置</a></li>
+		                                <li><a class="waves-effect waves-dark" href="blogger_logout.action">退出</a></li>
+		                            </ul>
+		                        </li>
+                        	</c:otherwise>
+                        </c:choose>
+                        
+                        <li><a class="waves-effect waves-dark" href="javascript:checkLogin()">写文章</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>
+</body>
+</html>

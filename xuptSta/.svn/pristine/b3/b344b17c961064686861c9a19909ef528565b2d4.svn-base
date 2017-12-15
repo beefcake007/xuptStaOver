@@ -1,0 +1,243 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>xuptSta_about</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<!-- css --> 
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/images/logo123.ico"/>
+<link rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+<link href="css/fancybox/jquery.fancybox.css" rel="stylesheet"> 
+<link href="css/flexslider.css" rel="stylesheet" /> 
+<link href="css/style.css" rel="stylesheet" />
+ 
+<script src="js/html5.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/jquery.easing.1.3.js"></script>
+<script src="materialize/js/materialize.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.fancybox.pack.js"></script>
+<script src="js/jquery.fancybox-media.js"></script>  
+<script src="js/jquery.flexslider.js"></script>
+<script src="js/animate.js"></script>
+<!-- Vendor Scripts -->
+<script src="js/modernizr.custom.js"></script>
+<script src="js/jquery.isotope.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/animate.js"></script> 
+<script src="js/custom.js"></script>
+<script type="text/javascript">
+	function checkForm(){
+		var name=$("#name").val();
+		var email=$("#email").val();
+		var mobile=$("#mobile").val();
+		var professional=$("#professional").val();
+		var message=$("#message").val();
+		if(name==""){
+			alert("姓名不能为空");
+			return false;
+		}
+		if(email==""){
+			alert("邮箱不能为空");
+			return false;
+		}
+		if(mobile==""){
+			alert("手机号不能为空");
+			return false;
+		}
+		if(professional==""){
+			alert("专业班级不能为空");
+			return false;
+		}
+		if(message==""){
+			alert("留言不能为空");
+			return false;
+		}
+		return true;
+	}
+</script>
+</head>
+<body style="background: #ECE9E6;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+">
+<div id="wrapper">
+	<!-- start header -->
+	<header>
+		<div class="navbar navbar-default navbar-static-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="index.jsp"><i class="icon-info-blocks fa fa-star"></i>XUPTSTA</a>
+				</div>
+				<div class="navbar-collapse collapse ">
+					<ul class="nav navbar-nav">
+						<li><a class="waves-effect waves-dark" href="index.jsp">主页</a></li>
+						<li><a class="waves-effect waves-dark" href="dynamic_head.action">最新动态</a></li>
+						<li><a class="waves-effect waves-dark" href="member_head.action?s_member.memberType.id=1">成员简介</a></li>
+						<li><a class="waves-effect waves-dark" href="competition.jsp">竞赛</a></li>
+						<li><a class="waves-effect waves-dark" href="join.jsp">纳新</a></li>
+						<li><a class="waves-effect waves-dark" href="blog_head.action">论坛</a></li>
+						<li class="active"><a class="waves-effect waves-dark" href="about.jsp">关于我们</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<section id="inner-headline">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h2 class="pageTitle">about xuptSTA</h2>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-wrapper content-block">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6">
+					<h3><span class="color">Some Facts About Us</span></h3>
+					<br>
+					<div class="media">
+						<i class="fa fa-smile-o pull-left fa-3x" style="color: #93c83f;"></i>
+						<div class="media-body">
+							<h3 class="media-heading"> 200+的成员人数 </h3>
+							协会目前成员200多人，包括"软件竞赛训练营"、"ACM兴趣小组"、"创新创业小组"等小组。</div>
+					</div>
+					<br>
+					<div class="media">
+						<i class="fa fa-check-square-o pull-left fa-3x" style="color: #93c83f;"></i>
+						<div class="media-body">
+							<h3 class="media-heading">10+的竞赛项目</h3>
+							积极参与各大竞赛活动，如"ACM_ICPC"、"蓝桥杯"、中国"互联网+"创新创业大赛、"英特尔杯"等。</div>
+					</div>
+					<br>
+					<div class="media">
+						<i class="fa fa-trophy pull-left fa-3x" style="color: #93c83f;"></i>
+						<div class="media-body">
+							<h3 class="media-heading">100+的参赛奖项</h3>
+							蓝桥杯，ACM_ICPC等比赛每年都会取得优异的成绩
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="accordion">
+						<h3><span class="color">Questions & Answers</span></h3>
+						<br>
+						<div class="panel-group" id="accordion1">
+							<div class="panel panel-default borderill">
+								<div class="panel-heading active">
+									<h3 class="panel-title"> <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne1"> "西邮软件科技协会"主要是做什么？ <i class="fa fa-angle-right pull-right"></i> </a> </h3>
+								</div>
+								<div id="collapseOne1" class="panel-collapse collapse in">
+									<div class="panel-body">
+										<div class="media accordion-inner">
+											<div class="media-body">
+												开发现在计算机科技前沿, 为计算机和IT行业开发更新的产品，参加各种国家和地方的竞赛来提升自我，锻炼自我的软件科学修养。</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default borderill">
+								<div class="panel-heading">
+									<h3 class="panel-title"> <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo1">  "西邮软件科技协会"主要参与的赛事有哪些？<i class="fa fa-angle-right pull-right"></i> </a> </h3>
+								</div>
+								<div id="collapseTwo1" class="panel-collapse collapse">
+									<div class="panel-body"><b>"ACM"</b>:ACM国际大学生程序设计竞赛已发展成为最具影响力的大学生计算机竞赛。<br/><b>"蓝桥杯"</b>:工业和信息化部人才交流中心特举办"全国软件专业人才设计与创业大赛"。<br/><b>"互联网+"</b>:由教育部与有关部委和吉林省人民政府共同主办。大赛旨在培养造就"大众创业、万众创新"的生力军。推动高校毕业生更高质量创业就业。 </div>
+								</div>
+							</div>
+							<div class="panel panel-default borderill">
+								<div class="panel-heading">
+									<h3 class="panel-title"> <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseThree1">  加入"西邮软件科技协会"的准则是什么？<i class="fa fa-angle-right pull-right"></i> </a> </h3>
+								</div>
+								<div id="collapseThree1" class="panel-collapse collapse">
+									<div class="panel-body">如果你喜欢编程，喜欢算法，想要参加各种竞赛，想要和兴趣相投的人一起切磋学习，想让自己的大学生活过得更有意义更加精彩，欢迎加入"西邮软件科技协会"! </div>
+								</div>
+							</div>
+							<div class="panel panel-default borderill">
+								<div class="panel-heading">
+									<h3 class="panel-title"> <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseFour1">如何加入"西邮软件科技协会"？ <i class="fa fa-angle-right pull-right"></i> </a> </h3>
+								</div>
+								<div id="collapseFour1" class="panel-collapse collapse">
+									<div class="panel-body">每年我们都会定期举行纳新宣讲，面向本校大一大二的同学纳新。想要加入我们的同学可以关注我们的官方微信微博， 或留意我们的纳新宣讲会的通知！</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="content">
+
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="about-logo">
+						<h3>Send us<span class="color"> a message</span></h3>
+						<p>请填写你正确的信息，并发送给我们，让我们更好的了解你</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<p> </p>
+
+					<!-- Form itself -->
+					<form name="sentMessage" id="contactForm" action="conus_write.action" onsubmit="return checkForm()">
+						<div class="input-field">
+							<input type="text" class="form-control" id="name" name="conus.name"/>
+							<label for="name" class="">   Name </label>
+							<p class="help-block"></p>
+
+						</div>
+						<div class="input-field">
+							<input type="email" class="form-control" id="email" name="conus.email"/>
+							<label for="name" class="">   Email </label>
+						</div>
+
+						<div class="input-field">
+							<input type="text" class="form-control" id="mobile" name="conus.mobile"/>
+							<label for="name" class="">   Mobile </label>
+						</div>
+
+						<div class="input-field">
+							<input type="text" class="form-control" id="professional" name="conus.professional"/>
+							<label for="name" class="">   Professional </label>
+						</div>
+
+						<div class="input-field">
+						 <textarea rows="10" cols="100" name="conus.message" id="message" class="form-control materialize-textarea" maxlength="999" style="resize:none"></textarea>
+							<label for="name" class="">   Message </label>
+						</div>
+						<div id="success"> </div> <!-- For success/fail messages -->
+						<button type="submit" class="btn btn-primary waves-effect waves-dark pull-right" style="margin-bottom:30px;">Send</button><br/>
+					</form>
+				</div>
+				<div class="col-md-6">
+
+				</div>
+			</div>
+		</div>
+
+	</section>
+
+	<jsp:include page="common/footer.jsp"></jsp:include>
+	
+</div>
+<a href="#" class="scrollup waves-effect waves-dark"><i class="fa fa-angle-up active"></i></a>
+</body>
+</html>

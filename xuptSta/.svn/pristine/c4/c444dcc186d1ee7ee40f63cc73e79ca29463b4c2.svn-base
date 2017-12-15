@@ -1,0 +1,126 @@
+package com.xuptSta.action;
+
+import java.io.File;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
+
+import org.apache.struts2.ServletActionContext;
+import org.aspectj.util.FileUtil;
+import org.springframework.stereotype.Controller;
+
+import com.opensymphony.xwork2.ActionSupport;
+import com.xuptSta.entity.Conus;
+import com.xuptSta.entity.Member;
+import com.xuptSta.entity.MemberType;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.service.ConusService;
+import com.xuptSta.util.DateUtil;
+import com.xuptSta.util.ResponseUtil;
+import com.xuptSta.util.StringUtil;
+@Controller
+public class ConusAction extends ActionSupport{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Resource
+	private ConusService conusService;
+	
+	private Conus conus;
+	private Conus s_conus;
+	private String ids;
+	private String page;
+	private String rows;
+	private Long total;
+	
+	public Conus getConus() {
+		return conus;
+	}
+
+	public void setConus(Conus conus) {
+		this.conus = conus;
+	}
+
+	public Conus getS_conus() {
+		return s_conus;
+	}
+
+	public void setS_conus(Conus s_conus) {
+		this.s_conus = s_conus;
+	}
+
+	public String getIds() {
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
+
+	public String getPage() {
+		return page;
+	}
+
+	public void setPage(String page) {
+		this.page = page;
+	}
+
+	public String getRows() {
+		return rows;
+	}
+
+	public void setRows(String rows) {
+		this.rows = rows;
+	}
+
+	public Long getTotal() {
+		return total;
+	}
+
+	public void setTotal(Long total) {
+		this.total = total;
+	}
+
+	public String write()throws Exception{
+		conusService.saveConus(conus);
+		return "write";
+	}
+	
+	public String list()throws Exception{
+		PageBean pageBean=new PageBean(Integer.parseInt(page),Integer.parseInt(rows));
+		List<Conus> conusList=conusService.findConusList(s_conus, pageBean);
+		total=conusService.getConusCount(s_conus);
+		JSONObject result=new JSONObject();
+		result.put("rows", conusList);
+		result.put("total", total);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	public String save()throws Exception{
+		conusService.saveConus(conus);
+		JSONObject result=new JSONObject();
+		result.put("success", true);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	public String delete()throws Exception{
+		JSONObject result=new JSONObject();
+		String[] idsStr=ids.split(",");
+		for(int i=0;i<idsStr.length;i++){
+			Conus conus=conusService.getConusById(Integer.parseInt(idsStr[i]));
+			conusService.deleteConus(conus);
+		}
+		result.put("success", true);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+}

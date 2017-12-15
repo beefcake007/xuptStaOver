@@ -1,0 +1,19 @@
+package com.xuptSta.service;
+
+import java.util.List;
+
+import com.xuptSta.entity.Conus;
+import com.xuptSta.entity.PageBean;
+
+public interface ConusService {
+
+	public List<Conus> findConusList(Conus s_conus,PageBean pageBean);
+	
+	public Long getConusCount(Conus s_conus);
+	
+	public void saveConus(Conus conus);
+	
+	public void deleteConus(Conus conus);
+	
+	public Conus getConusById(int conusId);
+}

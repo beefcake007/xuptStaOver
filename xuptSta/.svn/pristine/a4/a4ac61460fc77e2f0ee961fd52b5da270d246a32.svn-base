@@ -1,0 +1,184 @@
+package com.xuptSta.action;
+
+import java.io.File;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
+
+import org.apache.struts2.ServletActionContext;
+import org.aspectj.util.FileUtil;
+import org.springframework.stereotype.Controller;
+
+import com.opensymphony.xwork2.ActionSupport;
+import com.xuptSta.entity.Member;
+import com.xuptSta.entity.MemberType;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.service.MemberService;
+import com.xuptSta.service.MemberTypeService;
+import com.xuptSta.util.DateUtil;
+import com.xuptSta.util.ResponseUtil;
+import com.xuptSta.util.StringUtil;
+@Controller
+public class MemberAction extends ActionSupport{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Resource
+	private MemberTypeService memberTypeService;
+	@Resource
+	private MemberService memberService;
+	
+	private String mainPage;
+	private List<Member> memberList;
+	private List<MemberType> memberTypeList;
+	private Member s_member;
+	private String page;
+	private String rows;
+	private Long total;
+	private File proPic;
+	private String proPicFileName;
+	private Member member;
+	private String ids;
+	
+	public String getIds() {
+		return ids;
+	}
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
+	public Member getMember() {
+		return member;
+	}
+	public void setMember(Member member) {
+		this.member = member;
+	}
+	public File getProPic() {
+		return proPic;
+	}
+	public void setProPic(File proPic) {
+		this.proPic = proPic;
+	}
+	public String getProPicFileName() {
+		return proPicFileName;
+	}
+	public void setProPicFileName(String proPicFileName) {
+		this.proPicFileName = proPicFileName;
+	}
+	public String getPage() {
+		return page;
+	}
+	public void setPage(String page) {
+		this.page = page;
+	}
+	public String getRows() {
+		return rows;
+	}
+	public void setRows(String rows) {
+		this.rows = rows;
+	}
+	public Long getTotal() {
+		return total;
+	}
+	public void setTotal(Long total) {
+		this.total = total;
+	}
+	public Member getS_member() {
+		return s_member;
+	}
+	public void setS_member(Member s_member) {
+		this.s_member = s_member;
+	}
+	public String getMainPage() {
+		return mainPage;
+	}
+	public void setMainPage(String mainPage) {
+		this.mainPage = mainPage;
+	}
+	public List<Member> getMemberList() {
+		return memberList;
+	}
+	public void setMemberList(List<Member> memberList) {
+		this.memberList = memberList;
+	}
+	public List<MemberType> getMemberTypeList() {
+		return memberTypeList;
+	}
+	public void setMemberTypeList(List<MemberType> memberTypeList) {
+		this.memberTypeList = memberTypeList;
+	}
+
+	
+	public String comboList()throws Exception{
+		JSONArray jsonArray=new JSONArray();
+		JSONObject jsonObject=new JSONObject();
+		jsonObject.put("id", "");
+		jsonObject.put("title","请选择...");
+		jsonArray.add(jsonObject);
+		List<Member> memberList=memberService.findMemberList(s_member,null);
+		JsonConfig jsonConfig=new JsonConfig();
+		jsonConfig.setExcludes(new String[]{"memberType"});
+		JSONArray rows=JSONArray.fromObject(memberList, jsonConfig);
+		jsonArray.addAll(rows);
+		ResponseUtil.write(ServletActionContext.getResponse(), jsonArray);
+		return null;
+	}
+	
+	public String head()throws Exception{
+		memberTypeList=memberTypeService.findMemberTypeList(null,null);
+		memberList=memberService.findMemberList(s_member, null);
+		mainPage="member/memberList.jsp";
+		return "head";
+	}
+	
+	public String list()throws Exception{
+		PageBean pageBean=new PageBean(Integer.parseInt(page),Integer.parseInt(rows));
+		List<Member> memberList=memberService.findMemberList(s_member, pageBean);
+		Long total=memberService.getMemberCount(s_member);
+		JsonConfig jsonConfig=new JsonConfig();
+		jsonConfig.registerJsonValueProcessor(MemberType.class,new ObjectJsonValueProcessor(new String[]{"id","typeName"},MemberType.class));
+		JSONArray rows=JSONArray.fromObject(memberList, jsonConfig);
+		JSONObject result=new JSONObject();
+		result.put("rows", rows);
+		result.put("total", total);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	public String save()throws Exception{
+		if(proPic!=null){
+			String imageName=DateUtil.getCurrentDateStr();
+			String realPath=ServletActionContext.getServletContext().getRealPath("/images/member");
+			String imageFile=imageName+"."+proPicFileName.split("\\.")[1];
+			File saveFile=new File(realPath,imageFile);
+			FileUtil.copyFile(proPic, saveFile);
+			member.setImageName(imageFile);
+		}else if(StringUtil.isEmpty(member.getImageName())){
+			member.setImageName("");
+		}
+		memberService.saveMember(member);
+		JSONObject result=new JSONObject();
+		result.put("success", true);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	public String delete()throws Exception{
+		JSONObject result=new JSONObject();
+		String[] idsStr=ids.split(",");
+		for(int i=0;i<idsStr.length;i++){
+			Member member=memberService.getMemberById(Integer.parseInt(idsStr[i]));
+			memberService.deleteMember(member);
+		}
+		result.put("success", true);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+}

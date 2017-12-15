@@ -1,0 +1,94 @@
+package com.xuptSta.entity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity
+@Table(name="t_userOJ")
+public class UserOJ {
+
+	private int id;
+	private String email;
+	private String password;
+	private String name;
+	private String sex;
+	private String role;
+	private String enabled;
+	
+	private List<Test> testList=new ArrayList<Test>();
+	
+	@Id
+	@GeneratedValue(generator="_native")
+	@GenericGenerator(name="_native",strategy="native")
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	@Column(length=20)
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	@Column(length=20)
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	@Column(length=20)
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	@Column(length=2)
+	public String getSex() {
+		return sex;
+	}
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+	
+	@Column(length=10)
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
+	
+	@Column(length=2)
+	public String getEnabled() {
+		return enabled;
+	}
+	public void setEnabled(String enabled) {
+		this.enabled = enabled;
+	}
+	
+	@OneToMany(mappedBy="userOJ")
+	public List<Test> getTestList() {
+		return testList;
+	}
+	public void setTestList(List<Test> testList) {
+		this.testList = testList;
+	}
+}

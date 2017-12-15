@@ -1,0 +1,113 @@
+package com.xuptSta.serviceImpl;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.xuptSta.dao.BaseDAO;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.entity.Person;
+import com.xuptSta.service.PersonService;
+import com.xuptSta.util.StringUtil;
+
+@Service("personService")
+public class PersonServiceImpl implements PersonService
+{
+	@Resource
+	private BaseDAO<Person> baseDAO;
+	
+	
+	@Override
+	public void savePerson(Person person) {
+		// TODO Auto-generated method stub
+		baseDAO.merge(person);
+	}
+
+
+	@Override
+	public List<Person> getPersonList() {
+		// TODO Auto-generated method stub
+		List<Person> personList = baseDAO.find("from Person");
+		return personList;
+	}
+
+
+	@Override
+	public boolean personExist(Person person) {
+		// TODO Auto-generated method stub
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("from Person p where p.name=? and p.studentId=? and p.telephone=?");
+		param.add(person.getName());
+		param.add(person.getStudentId());
+		param.add(person.getTelephone());
+		if(baseDAO.get(hql.toString(), param)!=null)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+		
+	}
+
+
+	@Override
+	public List<Person> findPersonList(Person t_person, PageBean pageBean) {
+		// TODO Auto-generated method stub
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("from Person");
+		if(t_person!=null){
+			if(StringUtil.isNotEmpty(t_person.getName())){
+				hql.append(" and name like ?");
+				param.add("%"+t_person.getName()+"%");
+			}
+			if(StringUtil.isNotEmpty(t_person.getGrade())){
+				hql.append(" and grade like ?");
+				param.add("%"+t_person.getGrade()+"%");
+			}
+		}
+		if(pageBean!=null){
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param, pageBean);
+		}else{
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param);
+		}
+	}
+
+
+	@Override
+	public Long getPersonCount(Person t_person) {
+		// TODO Auto-generated method stub
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("select count(*) from Person");
+		if(t_person!=null){
+			if(StringUtil.isNotEmpty(t_person.getName())){
+				hql.append(" and name like ?");
+				param.add("%"+t_person.getName()+"%");
+			}
+			if(StringUtil.isNotEmpty(t_person.getGrade())){
+				hql.append(" and grade like ?");
+				param.add("%"+t_person.getGrade()+"%");
+			}
+		}
+		return baseDAO.count(hql.toString().replaceFirst("and", "where"), param);
+	}
+
+
+	@Override
+	public void deletePerson(Person person) {
+		// TODO Auto-generated method stub
+		baseDAO.delete(person);
+	}
+
+
+	@Override
+	public Person getPersonById(int personId) {
+		// TODO Auto-generated method stub
+		return baseDAO.get(Person.class, personId);
+	}
+	
+}

@@ -1,0 +1,72 @@
+package com.xuptSta.serviceImpl;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.xuptSta.dao.BaseDAO;
+import com.xuptSta.entity.BlogType;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.service.BlogTypeService;
+import com.xuptSta.util.StringUtil;
+@Service("blogTypeService")
+public class BlogTypeServiceImpl implements BlogTypeService{
+
+	@Resource
+	private BaseDAO<BlogType> baseDAO;
+	
+	@Override
+	public List<BlogType> findBlogType() {
+		String sql="from BlogType";
+		return baseDAO.find(sql);
+	}
+
+	@Override
+	public List<BlogType> findBlogType(BlogType s_blogType, PageBean pageBean) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("from BlogType");
+		if(s_blogType!=null){
+			if(StringUtil.isNotEmpty(s_blogType.getTypeName())){
+				hql.append(" and typeName like ?");
+				param.add("%"+s_blogType.getTypeName()+"%");
+			}
+		}
+		if(pageBean!=null){
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param, pageBean);
+		}else{
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param);
+		}
+	}
+
+	@Override
+	public Long getBlogTypeCount(BlogType s_blogType) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("select count(*) from BlogType");
+		if(s_blogType!=null){
+			if(StringUtil.isNotEmpty(s_blogType.getTypeName())){
+				hql.append(" and typeName like ?");
+				param.add("%"+s_blogType.getTypeName()+"%");
+			}
+		}
+		return baseDAO.count(hql.toString().replaceFirst("and", "where"), param);
+	}
+
+	@Override
+	public BlogType getBlogTypeById(int blogTypeId) {
+		return baseDAO.get(BlogType.class, blogTypeId);
+	}
+
+	@Override
+	public void saveBlogType(BlogType blogType) {
+		baseDAO.merge(blogType);
+	}
+
+	@Override
+	public void deleteBlogType(BlogType blogType) {
+		baseDAO.delete(blogType);
+	}
+
+}

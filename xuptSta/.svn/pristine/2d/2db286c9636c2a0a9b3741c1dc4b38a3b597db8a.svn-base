@@ -1,0 +1,85 @@
+package com.xuptSta.serviceImpl;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.xuptSta.dao.BaseDAO;
+import com.xuptSta.entity.Dynamic;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.service.DynamicService;
+import com.xuptSta.util.StringUtil;
+@Service("dynamicService")
+public class DynamicServiceImpl implements DynamicService{
+
+	@Resource
+	private BaseDAO<Dynamic> baseDAO;
+	
+	@Override
+	public boolean existDynamicWithDynamicTypeId(int dynamicTypeId) {
+		String hql="from Dynamic where dynamicType.id="+dynamicTypeId;
+		if(baseDAO.find(hql.toString()).size()>0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public List<Dynamic> findDynamicList(Dynamic s_dynamic, PageBean pageBean) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("from Dynamic");
+		if(s_dynamic!=null){
+			if(StringUtil.isNotEmpty(s_dynamic.getTitle())){
+				hql.append(" and title like ?");
+				param.add("%"+s_dynamic.getTitle()+"%");
+			}
+			if(s_dynamic.getDynamicType()!=null){
+				hql.append(" and dynamicType.id=?");
+				param.add(s_dynamic.getDynamicType().getId());
+			}
+		}
+		hql.append(" order by id desc");
+		if(pageBean!=null){
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param, pageBean);
+		}else{
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param);
+		}
+	}
+
+	@Override
+	public void saveDynamic(Dynamic dynamic) {
+		baseDAO.merge(dynamic);
+	}
+
+	@Override
+	public void deleteDynamic(Dynamic dynamic) {
+		baseDAO.delete(dynamic);
+	}
+
+	@Override
+	public Long getDynamicCount(Dynamic s_dynamic) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("select count(*) from Dynamic");
+		if(s_dynamic!=null){
+			if(StringUtil.isNotEmpty(s_dynamic.getTitle())){
+				hql.append(" and title like ?");
+				param.add("%"+s_dynamic.getTitle()+"%");
+			}
+			if(s_dynamic.getDynamicType()!=null){
+				hql.append(" and dynamicType.id=?");
+				param.add(s_dynamic.getDynamicType().getId());
+			}
+		}
+		return baseDAO.count(hql.toString().replaceFirst("and", "where"), param);
+	}
+
+	@Override
+	public Dynamic getDynamicById(int dynamicId) {
+		return baseDAO.get(Dynamic.class, dynamicId);
+	}
+
+}

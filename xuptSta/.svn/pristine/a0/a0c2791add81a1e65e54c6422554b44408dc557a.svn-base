@@ -1,0 +1,66 @@
+package com.xuptSta.serviceImpl;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.xuptSta.dao.BaseDAO;
+import com.xuptSta.entity.MemberType;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.service.MemberTypeService;
+import com.xuptSta.util.StringUtil;
+@Service("memberTypeService")
+public class MemberTypeServiceImpl implements MemberTypeService{
+
+	@Resource
+	private BaseDAO<MemberType> baseDAO;
+	
+	@Override
+	public List<MemberType> findMemberTypeList(MemberType s_memberType,PageBean pageBean) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("from MemberType");
+		if(s_memberType!=null){
+			if(StringUtil.isNotEmpty(s_memberType.getTypeName())){
+				hql.append(" and typeName like ?");
+				param.add("%"+s_memberType.getTypeName()+"%");
+			}
+		}
+		if(pageBean!=null){
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param, pageBean);
+		}else{
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param);
+		}
+	}
+	
+	@Override
+	public Long getMemberTypeCount(MemberType s_memberType) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("select count(*) from MemberType");
+		if(s_memberType!=null){
+			if(StringUtil.isNotEmpty(s_memberType.getTypeName())){
+				hql.append(" and typeName like ?");
+				param.add("%"+s_memberType.getTypeName()+"%");
+			}
+		}
+		return baseDAO.count(hql.toString().replaceFirst("and", "where"), param);
+	}
+
+	@Override
+	public void saveMemberType(MemberType memberType) {
+		baseDAO.merge(memberType);
+	}
+
+	@Override
+	public void deleteMemberType(MemberType memberType) {
+		baseDAO.delete(memberType);
+	}
+
+	@Override
+	public MemberType getMemberTypeById(int memberTypeId) {
+		return baseDAO.get(MemberType.class, memberTypeId);
+	}
+
+}

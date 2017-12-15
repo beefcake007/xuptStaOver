@@ -1,0 +1,119 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>西邮软件科技协会</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<!-- css --> 
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/images/logo123.ico"/>
+<link rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection" />
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+<link href="css/fancybox/jquery.fancybox.css" rel="stylesheet"> 
+<link href="css/flexslider.css" rel="stylesheet" /> 
+<link href="css/style.css" rel="stylesheet" />
+ 
+<script src="js/html5.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/jquery.easing.1.3.js"></script>
+<script src="materialize/js/materialize.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.fancybox.pack.js"></script>
+<script src="js/jquery.fancybox-media.js"></script>  
+<script src="js/jquery.flexslider.js"></script>
+<script src="js/animate.js"></script>
+<!-- Vendor Scripts -->
+<script src="js/modernizr.custom.js"></script>
+<script src="js/jquery.isotope.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/animate.js"></script> 
+<script src="js/custom.js"></script>
+<style type="text/css">
+.blur {	
+    -webkit-filter: grayscale(1); /* Webkit */  
+    filter: gray; /* IE6-9 */    
+    filter: grayscale(1); /* W3C */ 
+}
+</style>
+</head>
+<body>
+<div id="wrapper" class="home-page">
+	<jsp:include page="common/head.jsp"></jsp:include>
+	<section id="banner">
+	 
+	<!-- Slider -->
+        <div id="main-slider" class="flexslider">
+            <ul class="slides">
+              <li>
+                <img class="blur" src="images/slides/11.png" alt=""/>
+                <div class="flex-caption">
+                    <h3>Welcome to xuptSTA</h3>
+					<p>愿以年少济沧海，不枉西邮几度春</p>
+					 
+                </div>
+              </li>
+              <li>
+                <img class="blur" src="images/slides/22.png" alt="" />
+                <div class="flex-caption">
+                    <h3>Competition Introduction</h3>
+					<p>我们是一群喜欢参加竞赛的程序猿</p>
+					 
+                </div>
+              </li>
+            </ul>
+        </div>
+	<!-- end slider --> 
+	</section>  
+	 	<section id="content">
+	<div class="container">
+
+		<section class="services">
+	    	<div class="row">
+			<div class="col-md-12">
+				<div class="aligncenter">
+					<h2 class="aligncenter">Our Sta</h2>
+					西邮软件科技协会是西安邮电大学计算机学院针对软件工程专业方向所设立的学生科技协会，成立于2010年 4月。<br/>
+					协会目前成员近200人,含“软件竞赛 训练营”、“ACM兴趣小组”、“CSDN高校俱乐部”等小组。</div>
+				<br/>
+			</div>
+		</div>
+
+	 <div class="row">
+            <div class="col-sm-4 info-blocks">
+                <div class="info-blocks-in">
+				<i class="icon-info-blocks fa fa-html5"></i>
+                    <h3>Web</h3>
+					<div class="line"></div>
+                    <p>随着互联网的兴起，人们发现，CS架构不适合Web，最大的原因是Web应用程序的修改和升级非常迅速，而CS架构需要每个客户端逐个升级桌面App，因此，Browser/Server模式开始流行，简称BS架构。</p>
+                </div>
+            </div>
+            <div class="col-sm-4 info-blocks">
+                <div class="info-blocks-in">
+				 <i class="icon-info-blocks fa fa-coffee"></i>
+                    <h3>Java</h3>
+					<div class="line"></div>
+                    <p> Java语言其实是有个曾用名的~叫Oak，而且起这个名字的时候也是很随心的，只是因为看到了窗口外的一颗橡树（只是因为面向窗外多看了你一眼~），所以就叫为Oak，但Oak这个名字已经被注册。最后他们以Java这个名字命名了这个语言，据说是Sun公司的程序猿们都很喜欢喝咖啡，而且对爪哇岛的一种咖啡印象很深，所以就有了Java这个经典的名字和咖啡的图标。</p>
+                </div>
+            </div>
+            <div class="col-sm-4 info-blocks">
+                <div class="info-blocks-in">
+                <i class="icon-info-blocks fa fa-trophy"></i>
+                    <h3>算法</h3>
+					<div class="line"></div>
+                    <p>ACM国际大学生程序设计竞赛是由美國電腦協會（ACM）主办的，一项旨在展示大学生创新能力、团队精神和在压力下编写程序、分析和解决问题能力的年度竞赛。经过30多年的发展，ACM国际大学生程序设计竞赛已经发展成为最具影响力的大学生计算机竞赛。</p>
+                </div>
+            </div>
+        </div>
+		</section>
+	</div>
+	</section>
+	
+	<jsp:include page="common/footer.jsp"></jsp:include>
+	
+</div>
+<a href="#" class="scrollup waves-effect waves-dark"><i class="fa fa-angle-up active"></i></a>
+</body>
+</html>

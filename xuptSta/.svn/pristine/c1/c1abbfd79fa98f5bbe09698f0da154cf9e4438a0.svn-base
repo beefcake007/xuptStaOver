@@ -1,0 +1,21 @@
+package com.xuptSta.service;
+
+import java.util.List;
+
+import com.xuptSta.entity.Blog;
+import com.xuptSta.entity.PageBean;
+
+public interface BlogService {
+
+	public void saveBlog(Blog blog);
+	
+	public void deleteBlog(Blog blog);
+	
+	public List<Blog> findBlogList(Blog s_blog,PageBean pageBean);
+	
+	public Blog getBlogById(int blogId);
+	
+	public Long getBlogCount(Blog s_blog);
+	
+	public boolean existBlogWithBlogTypeId(int blogTypeId);
+}

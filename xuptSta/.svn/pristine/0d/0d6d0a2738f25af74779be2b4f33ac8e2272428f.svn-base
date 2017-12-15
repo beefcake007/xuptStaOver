@@ -1,0 +1,130 @@
+package com.xuptSta.action;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
+
+import org.apache.struts2.ServletActionContext;
+
+import com.opensymphony.xwork2.ActionSupport;
+import com.xuptSta.entity.DynamicType;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.service.DynamicService;
+import com.xuptSta.service.DynamicTypeService;
+import com.xuptSta.util.ResponseUtil;
+
+public class DynamicTypeAction extends ActionSupport{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Resource
+	private DynamicTypeService dynamicTypeService;
+	@Resource
+	private DynamicService dynamicService;
+	
+	private DynamicType dynamicType;
+	private DynamicType s_dynamicType;
+	private String ids;
+	private String page;
+	private String rows;
+	private Long total;
+	
+	
+	public DynamicType getDynamicType() {
+		return dynamicType;
+	}
+	public void setDynamicType(DynamicType dynamicType) {
+		this.dynamicType = dynamicType;
+	}
+	public DynamicType getS_dynamicType() {
+		return s_dynamicType;
+	}
+	public void setS_dynamicType(DynamicType s_dynamicType) {
+		this.s_dynamicType = s_dynamicType;
+	}
+	public String getIds() {
+		return ids;
+	}
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
+	public String getPage() {
+		return page;
+	}
+	public void setPage(String page) {
+		this.page = page;
+	}
+	public String getRows() {
+		return rows;
+	}
+	public void setRows(String rows) {
+		this.rows = rows;
+	}
+	public Long getTotal() {
+		return total;
+	}
+	public void setTotal(Long total) {
+		this.total = total;
+	}
+	
+	
+	public String list()throws Exception{
+		PageBean pageBean=new PageBean(Integer.parseInt(page),Integer.parseInt(rows));
+		List<DynamicType> dynamicTypeList=dynamicTypeService.findDynamicTypeList(s_dynamicType,pageBean);
+		Long total=dynamicTypeService.getDynamicTypeCount(s_dynamicType);
+		JsonConfig jsonConfig=new JsonConfig();
+		jsonConfig.setExcludes(new String[]{"dynamicList"});
+		JSONArray rows=JSONArray.fromObject(dynamicTypeList, jsonConfig);
+		JSONObject result=new JSONObject();
+		result.put("rows", rows);
+		result.put("total", total);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	public String save()throws Exception{
+		dynamicTypeService.saveDynamicType(dynamicType);
+		JSONObject result=new JSONObject();
+		result.put("success", true);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	public String delete()throws Exception{
+		JSONObject result=new JSONObject();
+		String[] idsStr=ids.split(",");
+		for(int i=0;i<idsStr.length;i++){
+			if(dynamicService.existDynamicWithDynamicTypeId(Integer.parseInt(idsStr[i]))){
+				result.put("exist", "成员类型下有成员不能删除");
+			}else{
+				DynamicType dynamicType=dynamicTypeService.getDynamicTypeById(Integer.parseInt(idsStr[i]));
+				dynamicTypeService.deleteDynamicType(dynamicType);
+			}
+		}
+		result.put("success", true);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	public String comboList()throws Exception{
+		JSONArray jsonArray=new JSONArray();
+		JSONObject jsonObject=new JSONObject();
+		jsonObject.put("id", "");
+		jsonObject.put("typeName","请选择...");
+		jsonArray.add(jsonObject);
+		List<DynamicType> dynamicTypeList=dynamicTypeService.findDynamicTypeList(null,null);
+		JsonConfig jsonConfig=new JsonConfig();
+		jsonConfig.setExcludes(new String[]{"dynamicList"});
+		JSONArray rows=JSONArray.fromObject(dynamicTypeList, jsonConfig);
+		jsonArray.addAll(rows);
+		ResponseUtil.write(ServletActionContext.getResponse(), jsonArray);
+		return null;
+	}
+}

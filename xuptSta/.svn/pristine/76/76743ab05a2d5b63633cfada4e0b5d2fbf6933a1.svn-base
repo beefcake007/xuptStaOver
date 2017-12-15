@@ -1,0 +1,136 @@
+package com.xuptSta.entity;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity
+@Table(name="t_blog")
+public class Blog {
+
+	private int id;
+	private String title;
+	private String blogImage;
+	private String summary;
+	private Date releaseDate;
+	private int clickHit;
+	private int replyHit;
+	private String content;
+	private int honey;
+	
+	private List<Comment> commentList=new ArrayList<Comment>();
+	private BlogType blogType;
+	private Blogger blogger;
+
+	
+	@Id
+	@GeneratedValue(generator="_native")
+	@GenericGenerator(name="_native",strategy="native")
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	@Column(length=200)
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	@Column(length=100)
+	public String getBlogImage() {
+		return blogImage;
+	}
+	public void setBlogImage(String blogImage) {
+		this.blogImage = blogImage;
+	}
+	
+	@Column(length=300)
+	public String getSummary() {
+		return summary;
+	}
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+	public Date getReleaseDate() {
+		return releaseDate;
+	}
+	public void setReleaseDate(Date releaseDate) {
+		this.releaseDate = releaseDate;
+	}
+	
+	@Column(length=5)
+	public int getClickHit() {
+		return clickHit;
+	}
+	public void setClickHit(int clickHit) {
+		this.clickHit = clickHit;
+	}
+	
+	@Column(length=5)
+	public int getReplyHit() {
+		return replyHit;
+	}
+	public void setReplyHit(int replyHit) {
+		this.replyHit = replyHit;
+	}
+	
+	@Lob
+	@Column(columnDefinition="TEXT")
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
+	public int getHoney() {
+		return honey;
+	}
+	public void setHoney(int honey) {
+		this.honey = honey;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name="blogTypeId")
+	public BlogType getBlogType() {
+		return blogType;
+	}
+	public void setBlogType(BlogType blogType) {
+		this.blogType = blogType;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name="bloggerId")
+	public Blogger getBlogger() {
+		return blogger;
+	}
+	public void setBlogger(Blogger blogger) {
+		this.blogger = blogger;
+	}
+	
+	@OneToMany(mappedBy="blog")
+	public List<Comment> getCommentList() {
+		return commentList;
+	}
+	public void setCommentList(List<Comment> commentList) {
+		this.commentList = commentList;
+	}
+
+}

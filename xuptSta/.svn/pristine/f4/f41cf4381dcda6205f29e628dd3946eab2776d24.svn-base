@@ -1,0 +1,83 @@
+package com.xuptSta.serviceImpl;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.xuptSta.dao.BaseDAO;
+import com.xuptSta.entity.Member;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.service.MemberService;
+import com.xuptSta.util.StringUtil;
+@Service("memberService")
+public class MemberServiceImpl implements MemberService{
+
+	@Resource
+	private BaseDAO<Member> baseDAO;
+	
+	@Override
+	public List<Member> findMemberList(Member s_member, PageBean pageBean) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("from Member");
+		if(s_member!=null){
+			if(StringUtil.isNotEmpty(s_member.getTitle())){
+				hql.append(" and title like ?");
+				param.add("%"+s_member.getTitle()+"%");
+			}
+			if(s_member.getMemberType()!=null){
+				hql.append(" and memberType.id=?");
+				param.add(s_member.getMemberType().getId());
+			}
+		}
+		if(pageBean!=null){
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param, pageBean);
+		}else{
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param);
+		}
+	}
+
+	@Override
+	public Long getMemberCount(Member s_member) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("select count(*) from Member");
+		if(s_member!=null){
+			if(StringUtil.isNotEmpty(s_member.getTitle())){
+				hql.append(" and title like ?");
+				param.add("%"+s_member.getTitle()+"%");
+			}
+			if(s_member.getMemberType()!=null){
+				hql.append(" and memberType.id=?");
+				param.add(s_member.getMemberType().getId());
+			}
+		}
+		return baseDAO.count(hql.toString().replaceFirst("and", "where"), param);
+	}
+
+	@Override
+	public void saveMember(Member member) {
+		baseDAO.merge(member);
+	}
+
+	@Override
+	public void deleteMember(Member member) {
+		baseDAO.delete(member);
+	}
+
+	@Override
+	public Member getMemberById(int memberId) {
+		return baseDAO.get(Member.class, memberId);
+	}
+
+	@Override
+	public boolean existMemberWithMemberTypeId(int memberTypeId) {
+		String hql="from Member where memberType.id="+memberTypeId;
+		if(baseDAO.find(hql.toString()).size()>0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+}

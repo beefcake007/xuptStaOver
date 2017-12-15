@@ -1,0 +1,19 @@
+package com.xuptSta.service;
+
+import java.util.List;
+
+import com.xuptSta.entity.DynamicType;
+import com.xuptSta.entity.PageBean;
+
+public interface DynamicTypeService {
+
+	public List<DynamicType> findDynamicTypeList(DynamicType s_dynamicType,PageBean pageBean);
+	
+	public void saveDynamicType(DynamicType dynamicType);
+	
+	public void deleteDynamicType(DynamicType dynamicType);
+	
+	public DynamicType getDynamicTypeById(int dynamicTypeId);
+	
+	public Long getDynamicTypeCount(DynamicType s_dynamicType);
+}

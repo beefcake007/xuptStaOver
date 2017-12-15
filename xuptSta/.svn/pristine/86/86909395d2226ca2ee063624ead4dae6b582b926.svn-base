@@ -1,0 +1,45 @@
+package com.xuptSta.util;
+
+import java.util.List;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import com.xuptSta.entity.Person;
+
+
+
+
+public class ExcelUtil {
+	
+	public static void fillExcelData(List<Person> personList,Workbook wb,String[] headers)throws Exception{
+		int rowIndex=0;
+		Sheet sheet=wb.createSheet();
+		Row row=sheet.createRow(rowIndex++);
+		for(int i=0;i<headers.length;i++){
+			row.createCell(i).setCellValue(headers[i]);
+		}
+		CreationHelper createHelper = wb.getCreationHelper();
+		CellStyle cellStyle = wb.createCellStyle();
+		cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy-mm-dd hh:mm:ss"));
+		for(int i=0;i<personList.size();i++)
+		{
+			Person person = personList.get(i);
+			row=sheet.createRow(rowIndex++);
+			row.createCell(0).setCellValue(person.getId());
+			row.createCell(1).setCellValue(person.getStudentId());
+			row.createCell(2).setCellValue(person.getName());
+			row.createCell(3).setCellValue(person.getGrade());
+			row.createCell(4).setCellValue(person.getTelephone());
+			Cell cell = row.createCell(5);
+			cell.setCellValue(person.getDate());
+			cell.setCellStyle(cellStyle);
+			row.createCell(6).setCellValue(person.getMessage());
+		}
+	}
+
+}

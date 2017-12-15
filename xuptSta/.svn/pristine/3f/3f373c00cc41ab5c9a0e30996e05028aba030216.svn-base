@@ -1,0 +1,187 @@
+package com.xuptSta.action;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.interceptor.ServletRequestAware;
+import org.springframework.stereotype.Controller;
+
+import com.opensymphony.xwork2.ActionSupport;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.entity.Person;
+import com.xuptSta.service.PersonService;
+import com.xuptSta.util.ExcelUtil;
+import com.xuptSta.util.ResponseUtil;
+import com.xuptSta.util.StringUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
+
+@Controller
+public class PersonAction extends ActionSupport implements ServletRequestAware
+{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Resource
+	private PersonService personService;
+	
+	HttpServletRequest request;
+	
+	private Person person;
+	private String result;
+
+	private List<Person> personList;
+	
+	private String page;
+	private Long total;
+	private String rows;
+	private String ids;
+	private String imageCode;
+	
+	public String getIds() {
+		return ids;
+	}
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
+	public Long getTotal() {
+		return total;
+	}
+	public void setTotal(Long total) {
+		this.total = total;
+	}
+	public String getResult() {
+		return result;
+	}
+	public void setResult(String result) {
+		this.result = result;
+	}
+	public Person getPerson() {
+		return person;
+	}
+	public void setPerson(Person person) {
+		this.person = person;
+	}
+	public List<Person> getPersonList() {
+		return personList;
+	}
+	public void setPersonList(List<Person> personList) {
+		this.personList = personList;
+	}
+	public String getImageCode() {
+		return imageCode;
+	}
+	public void setImageCode(String imageCode) {
+		this.imageCode = imageCode;
+	}
+	public String getPage() {
+		return page;
+	}
+	public void setPage(String page) {
+		this.page = page;
+	}
+	public String getRows() {
+		return rows;
+	}
+	public void setRows(String rows) {
+		this.rows = rows;
+	}
+	
+	public String savePerson() throws Exception
+	{
+		HttpSession session = request.getSession();
+		person.setDate(new Date());
+		if(StringUtil.isEmpty(imageCode))
+		{
+			result="验证码不能为空";
+		}
+		else if(!imageCode.equals(session.getAttribute("sRand")))
+		{
+			result="验证码错误";
+		}
+		else if(personService.personExist(person))
+		{
+			result="你已经提交过一次相关数据，请勿重复提交";
+		}
+		else
+		{
+			personService.savePerson(person);
+			result="报名成功";
+		}
+		return SUCCESS;
+	}
+	
+	
+	public String list() throws Exception
+	{
+		PageBean pageBean=new PageBean(Integer.parseInt(page),Integer.parseInt(rows));
+		List<Person> personList=personService.findPersonList(person, pageBean);
+		Long total=personService.getPersonCount(person);
+		JsonConfig jsonConfig=new JsonConfig();
+		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new DateJsonValueProcessor("yyyy-MM-dd hh:mm:ss"));
+		JSONArray rows = JSONArray.fromObject(personList,jsonConfig);
+		JSONObject result=new JSONObject();
+		result.put("rows", rows);
+		result.put("total", total);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	} 
+	
+	public String save() throws Exception
+	{
+		person.setDate(new Date());
+		JSONObject result=new JSONObject();
+		if(personService.personExist(person))
+		{
+			result.put("error", "该数据已经存在，请不要重复提交");
+		}
+		else
+		{
+			personService.savePerson(person);
+			result.put("success", true);
+		}
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	public String delete() throws Exception
+	{
+		JSONObject result=new JSONObject();
+		String[] idsStr=ids.split(",");
+		for(int i=0;i<idsStr.length;i++){
+			Person person = personService.getPersonById(Integer.parseInt(idsStr[i]));
+			personService.deletePerson(person);
+		}
+		result.put("success", true);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	public String export()throws Exception
+	{
+		Workbook wb=new HSSFWorkbook();
+		String headers[] = {"编号","学号","姓名","班级","电话","时间","留言"};
+		List<Person> person = personService.getPersonList();
+		ExcelUtil.fillExcelData(person, wb, headers);
+		ResponseUtil.export(ServletActionContext.getResponse(), wb, "纳新.xls");
+		return null;
+	}
+	
+	@Override
+	public void setServletRequest(HttpServletRequest request) {
+		this.request=request;
+	}
+
+}

@@ -1,0 +1,66 @@
+package com.xuptSta.serviceImpl;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.xuptSta.dao.BaseDAO;
+import com.xuptSta.entity.Conus;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.service.ConusService;
+import com.xuptSta.util.StringUtil;
+@Service("conusService")
+public class ConusServiceImpl implements ConusService{
+
+	@Resource
+	private BaseDAO<Conus> baseDAO;
+	
+	@Override
+	public List<Conus> findConusList(Conus s_conus, PageBean pageBean) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("from Conus");
+		if(s_conus!=null){
+			if(StringUtil.isNotEmpty(s_conus.getName())){
+				hql.append(" and name like ?");
+				param.add("%"+s_conus.getName()+"%");
+			}
+		}
+		if(pageBean!=null){
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param, pageBean);
+		}else{
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param);
+		}
+	}
+
+	@Override
+	public Long getConusCount(Conus s_conus) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("select count(*) from Conus");
+		if(s_conus!=null){
+			if(StringUtil.isNotEmpty(s_conus.getName())){
+				hql.append(" and name like ?");
+				param.add("%"+s_conus.getName()+"%");
+			}
+		}
+		return baseDAO.count(hql.toString().replaceFirst("and", "where"), param);
+	}
+
+	@Override
+	public void saveConus(Conus conus) {
+		baseDAO.merge(conus);
+	}
+
+	@Override
+	public void deleteConus(Conus conus) {
+		baseDAO.delete(conus);
+	}
+
+	@Override
+	public Conus getConusById(int conusId) {
+		return baseDAO.get(Conus.class, conusId);
+	}
+
+}

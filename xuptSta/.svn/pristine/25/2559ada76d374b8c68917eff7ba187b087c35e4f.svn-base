@@ -1,0 +1,53 @@
+package com.xuptSta.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity
+@Table(name="t_link")
+public class Link {
+
+	private int id;
+	private String linkName;
+	private String linkUrl;
+	private String linkImage;
+	
+	@Id
+	@GeneratedValue(generator="_native")
+	@GenericGenerator(name="_native",strategy="native")
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	@Column(length=20)
+	public String getLinkName() {
+		return linkName;
+	}
+	public void setLinkName(String linkName) {
+		this.linkName = linkName;
+	}
+	
+	@Column(length=20)
+	public String getLinkUrl() {
+		return linkUrl;
+	}
+	public void setLinkUrl(String linkUrl) {
+		this.linkUrl = linkUrl;
+	}
+
+	@Column(length=20)
+	public String getLinkImage() {
+		return linkImage;
+	}
+	public void setLinkImage(String linkImage) {
+		this.linkImage = linkImage;
+	}
+}

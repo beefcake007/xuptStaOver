@@ -1,0 +1,107 @@
+package com.xuptSta.serviceImpl;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.xuptSta.dao.BaseDAO;
+import com.xuptSta.entity.Blog;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.service.BlogService;
+import com.xuptSta.util.StringUtil;
+@Service("blogService")
+public class BlogServiceImpl implements BlogService{
+
+	@Resource
+	private BaseDAO<Blog> baseDAO;
+	
+	@Override
+	public void saveBlog(Blog blog) {
+		baseDAO.merge(blog);
+	}
+
+	@Override
+	public List<Blog> findBlogList(Blog s_blog, PageBean pageBean) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("from Blog");
+		if(s_blog!=null){
+			if(StringUtil.isNotEmpty(s_blog.getTitle())){
+				hql.append(" and title like ?");
+				param.add("%"+s_blog.getTitle()+"%");
+			}
+			
+			if(s_blog.getBlogger()!=null && StringUtil.isNotEmpty(s_blog.getBlogger().getNickName())){
+				hql.append(" and blogger.nickName like ?");
+				param.add("%"+s_blog.getBlogger().getNickName()+"%");
+			}
+			
+			if(s_blog.getBlogger()!=null && s_blog.getBlogger().getId()!=0){
+				hql.append(" and blogger.id=?");
+				param.add(s_blog.getBlogger().getId());
+			}
+			
+			if(s_blog.getBlogType()!=null){
+				hql.append(" and blogType.id=?");
+				param.add(s_blog.getBlogType().getId());
+			}
+		}
+		hql.append(" order by id desc");
+		if(pageBean!=null){
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param, pageBean);
+		}else{
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param);
+		}
+	}
+
+	@Override
+	public Blog getBlogById(int blogId) {
+		return baseDAO.get(Blog.class, blogId);
+	}
+
+	@Override
+	public Long getBlogCount(Blog s_blog) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("select count (*) from Blog");
+		if(s_blog!=null){
+			if(StringUtil.isNotEmpty(s_blog.getTitle())){
+				hql.append(" and title like ?");
+				param.add("%"+s_blog.getTitle()+"%");
+			}
+			
+			if(s_blog.getBlogger()!=null && StringUtil.isNotEmpty(s_blog.getBlogger().getNickName())){
+				hql.append(" and blogger.nickName like ?");
+				param.add("%"+s_blog.getBlogger().getNickName()+"%");
+			}
+			
+			if(s_blog.getBlogger()!=null && s_blog.getBlogger().getId()!=0){
+				hql.append(" and blogger.id=?");
+				param.add(s_blog.getBlogger().getId());
+			}
+			
+			if(s_blog.getBlogType()!=null){
+				hql.append(" and blogType.id=?");
+				param.add(s_blog.getBlogType().getId());
+			}
+		}
+		return baseDAO.count(hql.toString().replaceFirst("and", "where"), param);
+	}
+
+	@Override
+	public boolean existBlogWithBlogTypeId(int blogTypeId) {
+		String hql="from Blog where blogType.id="+blogTypeId;
+		if(baseDAO.find(hql.toString()).size()>0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public void deleteBlog(Blog blog) {
+		baseDAO.delete(blog);
+	}
+
+}

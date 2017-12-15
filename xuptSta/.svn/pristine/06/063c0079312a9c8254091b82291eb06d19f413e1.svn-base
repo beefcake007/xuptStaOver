@@ -1,0 +1,76 @@
+package com.xuptSta.serviceImpl;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.xuptSta.dao.BaseDAO;
+import com.xuptSta.entity.Blogger;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.service.BloggerService;
+import com.xuptSta.util.StringUtil;
+
+@Service("bloggerService")
+public class BloggerServiceImpl implements BloggerService{
+
+	@Resource
+	private BaseDAO<Blogger> baseDAO;
+	
+	@Override
+	public Blogger login(Blogger blogger) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("from Blogger b where b.userName=? and b.password=?");
+		param.add(blogger.getUserName());
+		param.add(blogger.getPassword());
+		return baseDAO.get(hql.toString(), param);
+	}
+
+	@Override
+	public void saveBlogger(Blogger blogger) {
+		baseDAO.merge(blogger);
+	}
+
+	@Override
+	public Blogger getBloggerById(int bloggerId) {
+		return baseDAO.get(Blogger.class, bloggerId);
+	}
+
+	@Override
+	public List<Blogger> findBloggerList(Blogger s_blogger, PageBean pageBean) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("from Blogger");
+		if(s_blogger!=null){
+			if(StringUtil.isNotEmpty(s_blogger.getUserName())){
+				hql.append(" and userName like ?");
+				param.add("%"+s_blogger.getUserName()+"%");
+			}
+		}
+		if(pageBean!=null){
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param, pageBean);
+		}else{
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param);
+		}
+	}
+
+	@Override
+	public void deleteBlogger(Blogger blogger) {
+		baseDAO.delete(blogger);
+	}
+
+	@Override
+	public Long getBloggerCount(Blogger s_blogger) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("select count(*) from Blogger");
+		if(s_blogger!=null){
+			if(StringUtil.isNotEmpty(s_blogger.getUserName())){
+				hql.append(" and userName like ?");
+				param.add("%"+s_blogger.getUserName()+"%");
+			}
+		}
+		return baseDAO.count(hql.toString().replaceFirst("and", "where"), param);
+	}
+
+}

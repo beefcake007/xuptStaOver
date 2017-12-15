@@ -1,0 +1,36 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Insert title here</title>
+</head>
+<body>
+<header>
+    <div class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.jsp"><i class="icon-info-blocks fa fa-star"></i>XUPTSTA</a>
+            </div>
+            <div class="navbar-collapse collapse ">
+                <ul class="nav navbar-nav">
+                    <li><a class="waves-effect waves-dark" href="index.jsp">主页</a></li>
+                    <li><a class="waves-effect waves-dark" href="dynamic_head.action">最新动态</a></li>
+                    <li class="active"><a class="waves-effect waves-dark" href="member_head.action?s_member.memberType.id=1">成员简介</a></li>
+                    <li><a class="waves-effect waves-dark" href="competition.jsp">竞赛</a></li>
+                    <li><a class="waves-effect waves-dark" href="join.jsp">纳新</a></li>
+                    <li><a class="waves-effect waves-dark" href="blog_head.action">论坛</a></li>
+                    <li><a class="waves-effect waves-dark" href="about.jsp">关于我们</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+</body>
+</html>

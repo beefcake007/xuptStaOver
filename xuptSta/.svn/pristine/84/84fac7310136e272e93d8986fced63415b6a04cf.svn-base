@@ -1,0 +1,200 @@
+﻿<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/images/logo123.ico"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/jquery-easyui-1.5.2/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/jquery-easyui-1.5.2/themes/icon.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/jquery-easyui-1.5.2/jquery.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/jquery-easyui-1.5.2/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/jquery-easyui-1.5.2/locale/easyui-lang-zh_CN.js"></script>
+<title>Insert title here</title>
+<script type="text/javascript">
+	var url;
+	
+	$(function(){
+		$("#typeName").combobox({
+			onSelect:function(record){
+				$("#title").combobox("reload","member_comboList.action?s_member.memberType.id="+record.id);
+				$("#title").combobox("setValue","");
+			}
+		});
+	});
+	
+	function searchBlogger(){
+		$("#dg").datagrid("load",{
+			"s_blogger.userName":$("#s_userName").val()
+		});
+	}
+	
+	function openBloggerAddDialog(){
+		$("#dlg").dialog("open").dialog("setTitle","添加博客主信息");
+		url="blogger_saveBG.action";
+	}
+	
+	function saveBlogger(){
+		$("#fm").form("submit",{
+			url:url,
+			onSubmit:function(){
+				if($("#typeName").combobox("getValue")==""){
+					$.messager.alert("系统提示","请选择用户类型");
+					return false;
+				}
+				if($("#title").combobox("getValue")==""){
+					$.messager.alert("系统提示","请选择用户");
+					return false;
+				}
+				return $(this).form("validate");
+			},
+			success:function(result){
+				var result=eval('('+result+')');
+				if(result.success){
+					$.messager.alert("系统提示","保存成功");
+					resetValue();
+					$("#dlg").dialog("close");
+					$("#dg").datagrid("reload");
+				}else{
+					$.messager.alert("系统提示","保存失败");
+					return;
+				}
+			}
+		});
+	}
+	
+	
+	function openBloggerModifyDialog(){
+		var selectedRows=$("#dg").datagrid('getSelections');
+		if(selectedRows.length!=1){
+			$.messager.alert("系统提示","请选择一条要修改的数据！");
+			return;
+		}
+		var row=selectedRows[0];
+		$("#dlg").dialog("open").dialog("setTitle","编辑博客主信息");
+		$("#nickName").val(row.nickName);
+		$("#password").val(row.password);
+		$("#profile").val(row.profile);
+		$("#sign").val(row.sign);
+		//$("#typeName").combobox("setValue",row.typeName);
+		//$("#title").combobox("setValue",row.userName);
+		url="blogger_saveBG.action?blogger.id="+row.id;
+	}
+	
+	function bloggerDelete(){
+		var selectedRows=$("#dg").datagrid('getSelections');
+		if(selectedRows.length==0){
+			$.messager.alert("系统提示","请选择要删除的数据！");
+			return;
+		}
+		var strIds=[];
+		for(var i=0;i<selectedRows.length;i++){
+			strIds.push(selectedRows[i].id);
+		}
+		var ids=strIds.join(",");
+		$.messager.confirm("系统提示","您确认要删除这<font color=red>"+selectedRows.length+"</font>条数据吗？",function(r){
+			if(r){
+				$.post("blogger_delete.action",{ids:ids},function(result){
+					if(result.success){
+						$.messager.alert("系统提示","数据已成功删除！");
+						$("#dg").datagrid("reload");
+					}else{
+						$.messager.alert("系统提示","数据删除失败！");
+					}
+				},"json");
+			}
+		});
+	}
+	
+	function closeBloggerAddDialog(){
+		$("#dlg").dialog("close");
+		resetValue();
+	}
+	
+	function resetValue(){
+		$("#typeName").combobox("setValue","");
+		$("#title").combobox("setValue","");
+		$("#nickName").val("");
+		$("#profile").val("");
+		$("#sign").val("");
+		$("#password").val("");
+	}
+	
+	function formatImageName(val,row){
+		return "<img src='${pageContext.request.contextPath}"+val+"' width=100 height=100>";
+	}
+</script>
+</head>
+<body>
+	<table id="dg" title="博客主管理" class="easyui-datagrid" fitColumns="true" pagination="true" rownumbers="true"
+					url="blogger_list.action" fit="true" toolbar="#tb">
+		<thead>
+			<tr>
+				<th field="cb" checkbox="true" align="center"></th>
+				<th field="id" width="50" align="center">编号</th>
+				<th field="imageName" width="100" align="center" formatter="formatImageName">头像</th>
+				<th field="nickName" width="100" align="center">昵称</th>
+				<th field="userName" width="100" align="center">用户名</th>
+				<th field="password" width="100" align="center">密码</th>
+				<th field="profile" width="200" align="center">简介</th>
+				<th field="sign" width="100" align="center">签名</th>
+			</tr>
+		</thead>
+	</table>
+	
+	<div id="tb">
+		<div>
+			<a href="javascript:openBloggerAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
+			<a href="javascript:openBloggerModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
+			<a href="javascript:bloggerDelete()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+		</div>
+		<div>
+			用户名：<input type="text" id="s_userName" size="20" onkeydown="if(event.keyCode==13) searchBlogger()">
+			<a href="javascript:searchBlogger()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
+		</div>
+	</div>
+	
+	<div id="dlg" class="easyui-dialog" style="width:600px;height:500px;padding:10px 20px;" closed="true" buttons="#dlg_buttons">
+		<form action="" id="fm" method="post">
+			<table style="border-collapse: separate;border-spacing: 5px 15px;">
+				<tr>
+					<td>昵称：</td>
+					<td colspan="4"><input type="text" id="nickName" name="blogger.nickName" class="easyui-validatebox" required="true"></td>
+				</tr>
+				
+				<tr>
+					<td>用户类型：</td>
+					<td><input id="typeName" name="typeName" class="easyui-combobox" data-options="panelHeight:'auto',editable:false,valueField:'id',textField:'typeName',url:'memberType_comboList.action'"></td>
+					<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					<td>用户名：</td>
+					<td><input id="title" name="member.id" class="easyui-combobox" data-options="panelHeight:'auto',editable:false,valueField:'id',textField:'title',url:'member_comboList.action'"></td>
+				</tr>
+				
+				<tr>
+					<td>密码：</td>
+					<td colspan="4"><input type="password" id="password" name="blogger.password" class="easyui-validatebox" required="true"></td>
+				</tr>
+				
+				<tr>
+					<td valign="top">简介：</td>
+					<td colspan="4">
+						<textarea rows="5" cols="50" id="profile" name="blogger.profile"></textarea>
+					</td>
+				</tr>
+				
+				<tr>
+					<td valign="top">签名：</td>
+					<td colspan="4">
+						<textarea rows="5" cols="50" id="sign" name="blogger.sign"></textarea>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<div id="dlg_buttons">
+		<a href="javascript:saveBlogger()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+		<a href="javascript:closeBloggerAddDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+	</div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+package com.xuptSta.service;
+
+import java.util.List;
+
+import com.xuptSta.entity.Blogger;
+import com.xuptSta.entity.PageBean;
+
+public interface BloggerService {
+
+	public Blogger login(Blogger blogger);
+	
+	public void saveBlogger(Blogger blogger);
+	
+	public Blogger getBloggerById(int bloggerId);
+	
+	public List<Blogger> findBloggerList(Blogger s_blogger,PageBean pageBean);
+	
+	public void deleteBlogger(Blogger blogger);
+	
+	public Long getBloggerCount(Blogger s_blogger);
+}

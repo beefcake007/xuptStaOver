@@ -1,0 +1,81 @@
+package com.xuptSta.entity;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity
+@Table(name="t_test")
+public class Test {
+
+	private int id;
+	private String submitTime;
+	private String code;
+	private float correctRate;
+	
+	private Question question;
+	private UserOJ userOJ;
+	
+	@Id
+	@GeneratedValue(generator="_native")
+	@GenericGenerator(name="_native",strategy="native")
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	@Column(length=5)
+	public String getSubmitTime() {
+		return submitTime;
+	}
+	public void setSubmitTime(String submitTime) {
+		this.submitTime = submitTime;
+	}
+	
+	@Lob
+	@Column(columnDefinition="TEXT")
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
+	@Column(length=5)
+	public float getCorrectRate() {
+		return correctRate;
+	}
+	public void setCorrectRate(float correctRate) {
+		this.correctRate = correctRate;
+	}
+	
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="questionId")
+	public Question getQuestion() {
+		return question;
+	}
+	public void setQuestion(Question question) {
+		this.question = question;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name="userOJId")
+	public UserOJ getUserOJ() {
+		return userOJ;
+	}
+	public void setUserOJ(UserOJ userOJ) {
+		this.userOJ = userOJ;
+	}
+	
+}

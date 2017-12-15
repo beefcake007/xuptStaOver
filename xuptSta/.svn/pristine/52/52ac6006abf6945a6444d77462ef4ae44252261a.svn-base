@@ -1,0 +1,21 @@
+package com.xuptSta.service;
+
+import java.util.List;
+
+import com.xuptSta.entity.Comment;
+import com.xuptSta.entity.PageBean;
+
+public interface CommentService {
+
+	public List<Comment> findCommentList(Comment s_comment,PageBean pageBean);
+	
+	public void saveComment(Comment comment);
+	
+	public void deleteComment(Comment comment);
+	
+	public Comment getCommentById(int commentId);
+	
+	public Long getCommentCount(Comment s_comment);
+	
+	public boolean existCommentWithBlogId(int blogId);
+}

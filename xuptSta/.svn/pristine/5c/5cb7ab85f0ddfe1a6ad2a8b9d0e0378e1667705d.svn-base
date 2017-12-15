@@ -1,0 +1,23 @@
+package com.xuptSta.service;
+
+import java.util.List;
+
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.entity.Person;
+
+public interface PersonService {
+	
+	public void savePerson(Person person);
+	
+	public List<Person> getPersonList();
+	
+	public List<Person> findPersonList(Person t_person,PageBean pageBean);
+	
+	public Long getPersonCount(Person t_person);
+	
+	public void deletePerson(Person person);
+	
+	public boolean personExist(Person person);
+	
+	public Person getPersonById(int personId);
+}

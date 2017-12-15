@@ -1,0 +1,177 @@
+﻿<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Insert title here</title>
+<script>
+	function openBlogType(id){
+		window.location.href="blog_head.action?s_blog.blogType.id="+id;
+	}
+	
+	function openBlog(id){
+		window.location.href="blog_blogDetail.action?blogId="+id+"&s_comment.blog.id="+id;
+	}
+	
+	function openBlogger(id){
+		window.location.href="blog_head.action?s_blog.blogger.id="+id;
+	}
+</script>
+</head>
+<body style="background: #ECE9E6;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #FFFFFF, #ECE9E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+">
+<div class="container">
+    <section id="banner">
+
+        <!-- Slider -->
+        <div id="main-slider" class="flexslider">
+            <ul class="slides">
+                <li>
+                    <img src="images/slides/1.jpg" alt="" />
+                    <div class="flex-caption">
+                        <h3>Welcome to xuptSTA</h3>
+                        <p>愿以年少济沧海，不枉西邮几度春</p>
+
+                    </div>
+                </li>
+                <li>
+                    <img src="images/slides/2.jpg" alt="" />
+                    <div class="flex-caption">
+                        <h3>Competition Introduction</h3>
+                        <p>我们是一群喜欢参加竞赛的程序猿</p>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- end slider -->
+    </section>
+    <div class="row">
+        <!--栅格左面博客内容-->
+        <div class="col-md-9 col-sm-9">
+        	<c:forEach items="${blogList }" var="blog">
+        		<section class="section-padding gray-bg section-margin">
+	                <div class="row">
+	                    <div class="col-md-9 col-sm-9">
+	                        <div class="about-text">
+	                        	<div>
+	                        		<a href="#"><img style=" border-radius:50%; height:40px; width:40px;" src="${pageContext.request.contextPath }${blog.blogger.imageName}"></a>
+	                        		&nbsp;&nbsp;
+	                        		<a href="javascript:openBlogger('${blog.blogger.id}')">${blog.blogger.nickName }</a>
+	                        		&nbsp;&nbsp;
+	                        		<a href="#"><fmt:formatDate value="${blog.releaseDate }" type="date" pattern="yyyy-MM-dd"/></a>
+	                        	</div>
+	                            <a href="javascript:openBlog('${blog.id }')"><h4>${blog.title }</h4></a>
+	                           	<p>${blog.summary }</p>
+	                            <br>
+	                            <div>
+	                            	<a href="javascript:openBlogType('${blog.blogType.id}')">${blog.blogType.typeName }</a>
+	                            	<i class="icon-info-blocks fa fa-eye" style="padding-left:20px;padding-right:5px;color: #93c83f;"></i>${blog.clickHit }
+	                            	<i class="icon-info-blocks fa fa-comment" style="padding-left:20px;padding-right:5px;color: #93c83f;"></i>${blog.replyHit }
+	                            	<i class="icon-info-blocks fa fa-thumbs-o-up" style="padding-left:20px;padding-right:5px;color: #93c83f;"></i>${blog.honey }
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="col-md-3 col-sm-3">
+	                        <div class="about-image">
+	                            <img src="${blog.blogImage }" alt="">
+	                        </div>
+	                    </div>
+	                </div>
+	            </section>
+        	</c:forEach>
+            <!-- 
+            <section class="section-padding gray-bg section-margin">
+                <div class="row">
+                    <div class="col-md-9 col-sm-9">
+                        <div class="about-text">
+                            <h4>blogTitle</h4>
+                            <p>大家好，我是小丸子~ 盛夏之季，大家在买衣服的时候，网购确实是一个很实在的选择！因为衣服的风格和搭配，可以根据图片来学习和挑选，而且淘宝店上有辣么多原创自制品牌店，风格多样</p>
+                            *查看模特的尺码数据，包括他/她的身高、体重和三围。如果身材和模特相近，尤其是在原创店基本上会用一个模特，那这个模特穿的所有衣服风格是值得参考和学习的。
+                            <br>
+                            <a href="#" class="btn btn-primary waves-effect waves-dark">查看更多</a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                        <div class="about-image">
+                            <h4>bloggerMessage</h4>
+                            <img src="images/about.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </section>
+	
+            <section class="section-padding gray-bg section-margin">
+                <div class="row">
+                    <div class="col-md-9 col-sm-9">
+                        <div class="about-text">
+                            <h4>blogTitle</h4>
+                            <p>大家好，我是小丸子~ 盛夏之季，大家在买衣服的时候，网购确实是一个很实在的选择！因为衣服的风格和搭配，可以根据图片来学习和挑选，而且淘宝店上有辣么多原创自制品牌店，风格多样</p>
+                            *查看模特的尺码数据，包括他/她的身高、体重和三围。如果身材和模特相近，尤其是在原创店基本上会用一个模特，那这个模特穿的所有衣服风格是值得参考和学习的。
+                            <br>
+                            <a href="#" class="btn btn-primary waves-effect waves-dark">查看更多</a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                        <div class="about-image">
+                            <h4>bloggerMessage</h4>
+                            <img src="images/about.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-padding gray-bg section-margin">
+                <div class="row">
+                    <div class="col-md-9 col-sm-9">
+                        <div class="about-text">
+                            <h4>blogTitle</h4>
+                            <p>大家好，我是小丸子~ 盛夏之季，大家在买衣服的时候，网购确实是一个很实在的选择！因为衣服的风格和搭配，可以根据图片来学习和挑选，而且淘宝店上有辣么多原创自制品牌店，风格多样</p>
+                            *查看模特的尺码数据，包括他/她的身高、体重和三围。如果身材和模特相近，尤其是在原创店基本上会用一个模特，那这个模特穿的所有衣服风格是值得参考和学习的。
+                            <br>
+                            <a href="#" class="btn btn-primary waves-effect waves-dark">查看更多</a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-3">
+                        <div class="about-image">
+                            <h4>bloggerMessage</h4>
+                            <img src="images/about.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </section> -->
+            
+	  		<div style="text-align:center;">
+	  			<ul class="pagination">
+		  			${pageCode }
+		  		</ul>
+	  		</div>
+            
+        </div>
+
+        <!--栅格右面的标签导航-->
+        <div class="col-md-3 col-sm-3">
+            <div style="margin:15px 0 0 0;">
+                <a href="blog_head.action"><img src="${pageContext.request.contextPath }/images/newday.png" width="100%"></a>
+                <a href="blog_head.action"><img src="${pageContext.request.contextPath }/images/sevenday.png" width="100%"></a>
+                <a href="blog_head.action"><img src="${pageContext.request.contextPath }/images/thirtyday.png" width="100%"></a>
+            </div>
+            <section class="section-padding gray-bg section-margin">
+                <div class="section-title text-center">
+                    <c:forEach items="${blogTypeList }" var="blogType">
+                    	<a href="javascript:openBlogType('${blogType.id}')"><p>${blogType.typeName }</p></a>
+                    </c:forEach>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<a href="#" class="scrollup waves-effect waves-dark"><i class="fa fa-angle-up active"></i></a>
+</body>
+</html>

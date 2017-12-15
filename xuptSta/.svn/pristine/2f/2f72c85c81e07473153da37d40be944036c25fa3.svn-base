@@ -1,0 +1,197 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/images/logo123.ico"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/jquery-easyui-1.5.2/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/jquery-easyui-1.5.2/themes/icon.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/jquery-easyui-1.5.2/jquery.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/jquery-easyui-1.5.2/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/jquery-easyui-1.5.2/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript">
+	
+	var url;
+
+	function openPersonAddDialog()
+	{
+		$("#dlg").dialog("open").dialog("setTitle","添加纳新信息");
+		url="person_save.action";
+	}
+	function savePerson()
+	{
+		$("#fm").form("submit",{
+			url:url,
+			onSubmit:function(){
+				var studentId = $("#t_studentId").val();
+				var jundge1 = /^0[0-9]{7}$/;
+				if(!jundge1.test(studentId))
+				{
+					$.messager.alert("系统提示","学号格式错误,例如:04153001");
+					return false;
+				}
+				var name = $("#t_name").val();
+				var jundge2 = /^[\u4e00-\u9fa5]{2,10}$/;
+				if(!jundge2.test(name))
+				{
+					$.messager.alert("系统提示","姓名必须为2-10位的汉字");
+					return false;
+				}
+				var grade = $("#t_grade").val();
+				var jundge3 = /^[\u4e00-\u9fa5]{2}[0-9]{4}$/;
+				if(!jundge3.test(grade))
+				{
+					$.messager.alert("系统提示","班级格式错误,例如软件1501");
+					return false;
+				}
+				var telephone = $("#t_telephone").val();
+				var jundge4 = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])[0-9]{8}$/;
+				if(!jundge4.test(telephone))
+				{
+					$.messager.alert("系统提示","请输入正确的手机号");
+					return false;
+				}
+				return true;
+			},
+			success:function(result){
+				var result=eval('('+result+')');
+				if(result.success){
+					$.messager.alert("系统提示","保存成功");
+					resetValue();
+					$("#dlg").dialog("close");
+					$("#dg").datagrid("reload");
+				}else{
+					$.messager.alert("系统提示",result.error);
+					resetValue();
+					return;
+				}
+			}
+		});
+	}
+	
+	function searchPerson()
+	{
+		$("#dg").datagrid("load",{
+			"person.name":$("#person_name").val()
+		});
+	}
+	
+	function personDelete()
+	{
+		var selectedRows=$("#dg").datagrid("getSelections");
+		if(selectedRows.length==0){
+			$.messager.alert("系统提示","请选择要删除的数据");
+			return;
+		}
+		var strIds=[];
+		for(var i=0;i<selectedRows.length;i++){
+			strIds.push(selectedRows[i].id);
+		}
+		var ids=strIds.join(",");
+		$.messager.confirm("系统提示","您确认要删除这<font color=red>"+selectedRows.length+"</font>条数据吗？",function(r){
+			if(r){
+				$.post("person_delete.action",{ids:ids},function(result){
+					if(result.success){
+						$.messager.alert("系统提示","数据已成功删除");
+						$("#dg").datagrid("reload");
+					}else{
+						$.messager.alert("系统提示","数据删除失败");
+					}
+				},"json");
+			}
+		});
+	}
+	
+	function exportPerson()
+	{
+		window.open('person_export.action')
+	}
+	
+	function resetValue()
+	{
+		$("#t_studentId").val("");
+		$("#t_name").val("");
+		$("#t_grade").val("");
+		$("#t_telephone").val("");
+	}
+	
+	
+	function openPersonModifyDialog()
+	{
+		var selectedRows=$("#dg").datagrid("getSelections");
+		if(selectedRows.length!=1){
+			$.messager.alert("系统提示","请选择一条要修改的数据");
+			return;
+		}
+		var row=selectedRows[0];
+		$("#dlg").dialog("open").dialog("setTitle","修改纳新信息");
+		$("#t_studentId").val(row.studentId);
+		$("#t_name").val(row.name);
+		$("#t_grade").val(row.grade);
+		$("#t_telephone").val(row.telephone);
+		url="person_save.action?person.id="+row.id;
+	}
+	
+</script>
+<title>Insert title here</title>
+</head>
+<body style="margin:1px;">
+	<table id="dg" title="纳新管理" class="easyui-datagrid" fitColumns="true" pagination="true" rownumbers="true"
+				url="person_list.action" fit="true" toolbar="#tb">
+		<thead>
+			<tr>
+				<th field="cd" checkbox="true" align="center"></th>
+				<th field="id" width="50" align="center">编号</th>
+				<th field="studentId" width="50" align="center">学号</th>
+				<th field="name" width="150" align="center">姓名</th>
+				<th field="grade" width="100" align="center">班级</th>
+				<th field="telephone" width="100" align="center">电话</th>
+				<th field="date" width="100" align="center" >时间</th>
+				<th field="message" width="200" align="center">留言</th>
+			</tr>
+		</thead>
+	</table>
+	
+	<div id="tb">
+		<div>
+			<a href="javascript:openPersonAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
+			<a href="javascript:openPersonModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
+			<a href="javascript:personDelete()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+			<a href="javascript:exportPerson()" class="easyui-linkbutton" iconCls="icon-export" plain="true">导出用户</a>
+		</div>
+		<div>
+			学生姓名：<input type="text" id="person_name" size="20" onkeydown="if(event.keyCode==13) searchPerson()">
+			<a href="javascript:searchPerson()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
+		</div>
+	</div>
+	
+	<div id="dlg" class="easyui-dialog" style="width:400px;height:300px;padding:10px 20px;" closed="true" buttons="#dlg_buttons">
+		<form id="fm" action="" method="post" enctype="multipart/form-data">
+			<table style="border-collapse: separate; border-spacing:5px 15px;">
+				<tr>
+					<td>学号：</td>
+					<td  colspan="4"><input type="text" id="t_studentId" name="person.studentId" class="easyui-validatebox" required="true"></td>
+				</tr>
+				<tr>
+					<td>姓名：</td>
+					<td  colspan="4"><input type="text" name="person.name" id="t_name" class="easyui-validatebox" required="true"></td>
+				</tr>
+				<tr>
+					<td>班级</td>
+					<td  colspan="4"><input type="text" id="t_grade" name="person.grade" class="easyui-validatebox" required="true"></td>
+				</tr>
+				<tr>
+					<td>电话:</td>
+					<td  colspan="4"><input type="text" id="t_telephone" name="person.telephone" class="easyui-validatebox" required="true"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<div id="dlg_buttons">
+		<a href="javascript:savePerson()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+		<a href="" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+	</div>
+</body>
+</html>

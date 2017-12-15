@@ -1,0 +1,20 @@
+package com.xuptSta.service;
+
+import java.util.List;
+
+import com.xuptSta.entity.Member;
+import com.xuptSta.entity.MemberType;
+import com.xuptSta.entity.PageBean;
+
+public interface MemberTypeService {
+
+	public List<MemberType> findMemberTypeList(MemberType s_memberType,PageBean pageBean);
+	
+	public void saveMemberType(MemberType memberType);
+	
+	public void deleteMemberType(MemberType memberType);
+	
+	public MemberType getMemberTypeById(int memberTypeId);
+	
+	public Long getMemberTypeCount(MemberType s_memberType);
+}

@@ -1,0 +1,67 @@
+package com.xuptSta.serviceImpl;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.xuptSta.dao.BaseDAO;
+import com.xuptSta.entity.DynamicType;
+import com.xuptSta.entity.PageBean;
+import com.xuptSta.service.DynamicTypeService;
+import com.xuptSta.util.StringUtil;
+@Service("dynamicTypeService")
+public class DynamicTypeServiceImpl implements DynamicTypeService{
+
+	@Resource
+	private BaseDAO<DynamicType> baseDAO;
+	
+	@Override
+	public List<DynamicType> findDynamicTypeList(DynamicType s_dynamicType,
+			PageBean pageBean) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("from DynamicType");
+		if(s_dynamicType!=null){
+			if(StringUtil.isNotEmpty(s_dynamicType.getTypeName())){
+				hql.append(" and typeName like ?");
+				param.add("%"+s_dynamicType.getTypeName()+"%");
+			}
+		}
+		if(pageBean!=null){
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param, pageBean);
+		}else{
+			return baseDAO.find(hql.toString().replaceFirst("and", "where"), param);
+		}
+	}
+
+	@Override
+	public void saveDynamicType(DynamicType dynamicType) {
+		baseDAO.merge(dynamicType);
+	}
+
+	@Override
+	public void deleteDynamicType(DynamicType dynamicType) {
+		baseDAO.delete(dynamicType);
+	}
+
+	@Override
+	public DynamicType getDynamicTypeById(int dynamicTypeId) {
+		return baseDAO.get(DynamicType.class, dynamicTypeId);
+	}
+
+	@Override
+	public Long getDynamicTypeCount(DynamicType s_dynamicType) {
+		List<Object> param=new LinkedList<Object>();
+		StringBuffer hql=new StringBuffer("select count(*) from DynamicType");
+		if(s_dynamicType!=null){
+			if(StringUtil.isNotEmpty(s_dynamicType.getTypeName())){
+				hql.append(" and typeName like ?");
+				param.add("%"+s_dynamicType.getTypeName()+"%");
+			}
+		}
+		return baseDAO.count(hql.toString().replaceFirst("and", "where"), param);
+	}
+
+}

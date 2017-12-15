@@ -1,0 +1,94 @@
+package com.xuptSta.entity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity
+@Table(name="t_question")
+public class Question {
+
+	private int id;
+	private String description;
+	private String name;
+	private String questionNo;
+	
+	private Test test;
+	private Categories categories;
+	private List<TestData> testDataList=new ArrayList<TestData>();
+	
+	@Id
+	@GeneratedValue(generator="_native")
+	@GenericGenerator(name="_native",strategy="native")
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	@Lob
+	@Column(columnDefinition="TEXT")
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	@Column(length=50)
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
+	@Column(length=5)
+	public String getQuestionNo() {
+		return questionNo;
+	}
+	public void setQuestionNo(String questionNo) {
+		this.questionNo = questionNo;
+	}
+	
+	@OneToOne(mappedBy="question",cascade=CascadeType.ALL)
+	public Test getTest() {
+		return test;
+	}
+	public void setTest(Test test) {
+		this.test = test;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name="categoriesId")
+	public Categories getCategories() {
+		return categories;
+	}
+	public void setCategories(Categories categories) {
+		this.categories = categories;
+	}
+	
+	@OneToMany(mappedBy="question")
+	public List<TestData> getTestDataList() {
+		return testDataList;
+	}
+	public void setTestDataList(List<TestData> testDataList) {
+		this.testDataList = testDataList;
+	}
+	
+}

@@ -1,0 +1,62 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Insert title here</title>
+</head>
+<body>
+<footer>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="widget">
+						<h5 class="widgetheading">主管部门：</h5>
+						<p>
+							<i class="icon-phone"></i>西安邮电大学计算机学院<br>
+							<i class="icon-envelope-alt"></i>软件工程系
+						</p>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="widget">
+						<h5 class="widgetheading">相关链接：</h5>
+						<ul class="link-list">
+							<li><a class="waves-effect waves-dark" href="http://222.24.19.3:81/xiyoucs/index.asp">西安邮电大学计算机学院</a></li>
+							<li><a class="waves-effect waves-dark" href="http://acm.xupt.edu.cn/">XUPT Online Judge</a></li>
+							<li><a class="waves-effect waves-dark" href="http://weibo.com/xiyousta?is_hot=1">软件科技协会微博</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="widget">
+						<h5 class="widgetheading">联系地址：</h5>
+						<ul class="link-list">
+							<li><a class="waves-effect waves-dark" href="#">西安邮电大学长安校区</a></li>
+							<li><a class="waves-effect waves-dark" href="#">东区逸夫楼 FZ129</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="widget">
+						<h5 class="widgetheading">关注我们：</h5>
+						<ul class="link-list">
+							<li><a class="waves-effect waves-dark" href="#">微信公众号: sta_xupt</a></li>
+							<li><img src="images/STA.jpg" height="60px"></li>
+							<li><a class="waves-effect waves-dark" href="http://weibo.com/xiyousta?is_hot=1">软件科技协会微博</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="sub-footer">
+			<div class="container">
+				<div class="col-md-12">
+					<center><span>Copyright &copy; 2017&nbsp;西安邮电大学软件科技协会版权所有 </span></center>
+				</div>
+			</div>
+		</div>
+	</footer>
+</body>
+</html>

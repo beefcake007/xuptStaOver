@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE struts PUBLIC  
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"  
+    "http://struts.apache.org/dtds/struts-2.3.dtd">  
+      
+<struts>  
+    <constant name="struts.i18n.encoding" value="UTF-8" />  
+    <constant name="struts.action.extension" value="action" />  
+	<constant name="struts.multipart.saveDir" value="/images" />
+
+	<package name="xuptSta" namespace="/" extends="struts-default">  
+    	<action name="blog_*" class="com.xuptSta.action.BlogAction" method="{1}">
+    		<result name="head">blog.jsp</result>
+    		<result name="write">blog.jsp</result>
+    		<result name="helloBG">helloBG.jsp</result>
+    		<result name="index" type="redirectAction">blog_head.action</result>
+    	</action>
+    	
+    	<action name="blogger_*" class="com.xuptSta.action.BloggerAction" method="{1}">
+    		<result name="login" type="redirectAction">blog_head.action</result>
+    		<result name="error" type="redirectAction">blog_reLogin.action</result>
+    		<result name="logout" type="redirectAction">blog_head.action</result>
+    		<result name="write">blog.jsp</result>
+    	</action>
+    	
+    	<action name="member_*" class="com.xuptSta.action.MemberAction" method="{1}">
+    		<result name="head">member.jsp</result>
+    	</action>
+    	
+    	<action name="memberType_*" class="com.xuptSta.action.MemberTypeAction" method="{1}">
+    		
+    	</action>
+    	
+    	<action name="dynamic_*" class="com.xuptSta.action.DynamicAction" method="{1}">
+    		<result name="head">dynamic.jsp</result>
+    	</action>
+    	
+    	<action name="dynamicType_*" class="com.xuptSta.action.DynamicTypeAction" method="{1}">
+    		
+    	</action>
+    	
+    	<action name="conus_*" class="com.xuptSta.action.ConusAction" method="{1}">
+    		<result name="write">index.jsp</result>
+    	</action>
+    	
+    	<action name="blogType_*" class="com.xuptSta.action.BlogTypeAction" method="{1}">
+    		
+    	</action>
+    	
+    	<action name="comment_*" class="com.xuptSta.action.CommentAction" method="{1}">
+    	
+    	</action>
+    	
+    	<action name="user_*" class="com.xuptSta.action.UserAction" method="{1}">
+    		<result name="error">login.jsp</result>
+			<result name="success">main.jsp</result>
+			<result name="logout" type="redirect">background/login.jsp</result>
+    	</action>
+    	
+    	<action name="person_*" class="com.xuptSta.action.PersonAction" method="{1}">
+			<result name="success">join.jsp</result>
+    	</action>
+    	
+    </package>  
+</struts>   
